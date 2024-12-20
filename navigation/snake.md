@@ -16,6 +16,7 @@ permalink: /snake/
         height: 100vh;
     }
 
+
     .menu-container {
         position: absolute;
         top: 50%;
@@ -23,6 +24,7 @@ permalink: /snake/
         transform: translate(-50%, -50%);
         text-align: center;
     }
+
 
     button {
         font-size: 28px;
@@ -37,11 +39,13 @@ permalink: /snake/
         transition: all 0.3s ease-in-out;
     }
 
+
     button:hover {
         background-color: #45a049;
         transform: scale(1.1);
         box-shadow: 0 10px 40px rgba(76, 175, 80, 0.8);
     }
+
 
     canvas {
         display: none;
@@ -52,6 +56,7 @@ permalink: /snake/
         transition: background-color 0.5s ease-in-out;
     }
 
+
     #score-container {
         position: absolute;
         top: 20px;
@@ -61,6 +66,7 @@ permalink: /snake/
         color: #4caf50;
         display: none;
     }
+
 
     #game-over-overlay {
         position: absolute;
@@ -77,15 +83,18 @@ permalink: /snake/
         z-index: 10;
     }
 
+
     #game-over-overlay h1 {
         font-size: 48px;
         margin-bottom: 20px;
     }
 
+
     #game-over-overlay p {
         font-size: 24px;
         margin-bottom: 30px;
     }
+
 
     #game-over-overlay button {
         font-size: 20px;
@@ -93,9 +102,11 @@ permalink: /snake/
     }
 </style>
 
+
 <div class="menu-container">
     <button id="start-button">Start Game</button>
 </div>
+
 
 <div id="game-over-overlay">
     <h1>Game Over</h1>
@@ -103,11 +114,14 @@ permalink: /snake/
     <button id="restart-button">Restart Game</button>
 </div>
 
+
 <div id="score-container">
     Score: <span id="score_value">0</span>
 </div>
 
+
 <canvas id="snake" width="320" height="320"></canvas>
+
 
 <script>
     (function () {
@@ -120,6 +134,7 @@ permalink: /snake/
         const scoreContainer = document.getElementById("score-container");
         const scoreElement = document.getElementById("score_value");
 
+
         let snake = [];
         let food = { x: 0, y: 0 };
         let direction = 1;
@@ -129,6 +144,7 @@ permalink: /snake/
         let speed = 150;
         let gameLoop;
         const foodSound = new Audio('/mnt/data/eating_an-apple-slowly-slowly-sfx-253209.mp3');
+
 
         const startGame = () => {
             score = 0;
@@ -144,6 +160,7 @@ permalink: /snake/
             gameLoop = setInterval(mainLoop, speed);
         };
 
+
         const endGame = () => {
             clearInterval(gameLoop);
             finalScore.innerText = score;
@@ -152,9 +169,11 @@ permalink: /snake/
             scoreContainer.style.display = "none";
         };
 
+
         const mainLoop = () => {
             const head = { ...snake[0] };
             direction = nextDirection;
+
 
             switch (direction) {
                 case 0: head.y--; break;
@@ -163,10 +182,12 @@ permalink: /snake/
                 case 3: head.x--; break;
             }
 
+
             if (checkCollision(head)) {
                 endGame();
                 return;
             }
+
 
             snake.unshift(head);
             if (head.x === food.x && head.y === food.y) {
@@ -178,17 +199,21 @@ permalink: /snake/
                 snake.pop();
             }
 
+
             renderGame();
         };
+
 
         const renderGame = () => {
             ctx.fillStyle = score > 10 ? "#333" : "#222"; // Slightly dynamic background color
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+
             ctx.fillStyle = "#4caf50";
             for (const segment of snake) {
                 ctx.fillRect(segment.x * blockSize, segment.y * blockSize, blockSize, blockSize);
             }
+
 
             ctx.fillStyle = "#ff4500";
             ctx.shadowColor = "#ff4500";
@@ -197,19 +222,23 @@ permalink: /snake/
             ctx.shadowBlur = 0;
         };
 
+
         const checkCollision = (head) => {
             if (head.x < 0 || head.y < 0 || head.x >= canvas.width / blockSize || head.y >= canvas.height / blockSize) return true;
             return snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
         };
+
 
         const spawnFood = () => {
             food.x = Math.floor(Math.random() * (canvas.width / blockSize));
             food.y = Math.floor(Math.random() * (canvas.height / blockSize));
         };
 
+
         const updateScore = (newScore) => {
             scoreElement.innerText = newScore;
         };
+
 
         const adjustSpeed = () => {
             clearInterval(gameLoop);
@@ -217,10 +246,12 @@ permalink: /snake/
             gameLoop = setInterval(mainLoop, speed);
         };
 
+
         const playFoodSound = () => {
             foodSound.currentTime = 0;
             foodSound.play();
         };
+
 
         const changeDirection = (e) => {
             switch (e.key) {
@@ -231,8 +262,11 @@ permalink: /snake/
             }
         };
 
+
         startButton.addEventListener("click", startGame);
         restartButton.addEventListener("click", startGame);
         document.addEventListener("keydown", changeDirection);
     })();
 </script>
+
+
